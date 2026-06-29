@@ -8,7 +8,7 @@ const baseUrl = environment.baseUrl;
 
 interface Options {
   limit?: string;
-  offset?: string;
+  offset?: number;
   gender?: string;
 }
 

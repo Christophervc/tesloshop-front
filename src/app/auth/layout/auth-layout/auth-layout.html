@@ -1,8 +1,35 @@
-<div class="flex items-center justify-center min-h-dvh">
-    <div class="w-full max-w-xs bg-slate-100 shadow-2xl rounded-lg p-4">
-        <h1 class="text-2xl font-montserrat font-bold text-secondary text-center mb-2">
-            Authenticación
-        </h1>
-        <router-outlet />
-    </div>
+<div class="flex justify-center bg-slate-100 overflow-hidden">
+  <div
+    class="grid w-full grid-cols-1 gap-6 md:grid-cols-[1.2fr_1fr] bg-slate-100 shadow-2xl overflow-hidden"
+  >
+    @if (showImage()) {
+      <section
+        class="relative hidden md:flex min-h-dvh items-center justify-center overflow-hidden"
+      >
+        <img
+          loading="lazy"
+          src="https://images.unsplash.com/photo-1635777076158-ab239bd303cc"
+          alt="Autenticación Teslo Shop"
+          class="h-full w-full object-cover"
+        />
+        <div class="absolute inset-0 bg-slate-900/55"></div>
+        <div class="absolute z-10 p-8 text-white max-w-sm">
+          <h2 class="text-4xl font-bold mb-3 font-montserrat">Teslo Shop</h2>
+          <p class="text-shadow-accent font-thin text-xl leading-6 opacity-90">
+            Compra con estilo, encuentra tus mejores prendas y vive la experiencia Teslo.
+          </p>
+        </div>
+      </section>
+    }
+
+    <section class="flex min-h-dvh items-center justify-center p-6 sm:p-10">
+      <div class="w-full max-w-md">
+        <h1 class="text-3xl font-bold text-secondary mb-3">{{ pageTitle() }}</h1>
+        <p class="text-slate-600 mb-8 leading-7">{{ pageSubtitle() }}</p>
+        <div class="flex flex-col gap-4 w-full">
+          <router-outlet />
+        </div>
+      </div>
+    </section>
+  </div>
 </div>

@@ -4,7 +4,7 @@ import { Pagination } from '@/shared/components/Pagination/Pagination';
 import { PaginationService } from '@/shared/components/Pagination/pagination.service';
 import { Component, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-products-admin-page',
@@ -14,6 +14,7 @@ import { RouterLink } from '@angular/router';
 export class ProductsAdminPage {
   productsService = inject(ProductService);
   paginationService = inject(PaginationService);
+  router = inject(Router);
 
   productsPerPage = signal(10);
 
@@ -29,4 +30,9 @@ export class ProductsAdminPage {
       });
     },
   });
+
+  onProductsPerPageChange(value: number) {
+    this.productsPerPage.set(value);
+    this.router.navigate([], { queryParams: { page: 1 } });
+  }
 }

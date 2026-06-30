@@ -14,7 +14,8 @@
 
   <select
     class="select select-bordered w-32"
-    (change)="productsPerPage.set(+selectPerPage.value)"
+    [value]="productsPerPage()"
+    (change)="onProductsPerPageChange(+selectPerPage.value)"
     #selectPerPage
   >
     <option value="10">10</option>

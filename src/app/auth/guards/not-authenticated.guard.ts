@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { CanMatchFn, Route, UrlSegment, PartialMatchRouteSnapshot, Router } from '@angular/router';
+import { CanMatchFn, Route, UrlSegment, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { firstValueFrom } from 'rxjs';
 

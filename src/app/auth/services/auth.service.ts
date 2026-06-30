@@ -14,7 +14,7 @@ type AuthStatus = 'checking' | 'authenticated' | 'not-authenticated';
 export class AuthService {
   private _authStatus = signal<AuthStatus>('checking');
   private _user = signal<User | null>(null);
-  private _token = signal<string | null>(null);
+  private _token = signal<string | null>(localStorage.getItem('token'));
 
   private http = inject(HttpClient);
 
@@ -32,8 +32,8 @@ export class AuthService {
     return 'not-authenticated';
   });
 
-  user = computed(() => this._user);
-  token = computed(() => this._token);
+  user = computed(() => this._user());
+  token = computed(() => this._token());
 
   login(email: string, password: string): Observable<boolean> {
     return this.http

@@ -47,17 +47,18 @@
     </ul>
   </div>
   <div class="navbar-end gap-4">
+    
     @if (authService.authStatus() === 'authenticated') {
     <button class="btn btn-ghost">{{authService.user()?.fullName}}</button>
     <button class="btn btn-sm btn-error" (click)="authService.logout()">Salir</button>
     }
-    @else if (authService.authStatus() === 'not-authenticated') {
+    @if (authService.isAdmin()) {
+      <button class="btn btn-sm btn-info" routerLink="/admin/dashboard">Administrar</button>
+    }
+
+    @if(authService.authStatus() === 'not-authenticated') {
       <a class="btn btn-sm btn-secondary" routerLink="/auth/login">Login</a>
       <a class="btn btn-sm btn-primary" routerLink="/auth/register">Registro</a>
     }
-    @else {
-      <button class="btn btn-ghost">...</button>
-    }
-
   </div>
 </div>

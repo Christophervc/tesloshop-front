@@ -1,64 +1,64 @@
-<div class="navbar bg-base-100 shadow-sm">
+<div class="navbar bg-base-100 shadow-sm px-4">
+  
   <div class="navbar-start">
     <div class="dropdown">
-      <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+      <div tabindex="0" role="button" class="btn btn-ghost lg:hidden" aria-label="Menu">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
         </svg>
       </div>
-      <ul tabindex="-1" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-        <li>
-          <a routerLink="/gender/men" class="btn btn-ghost" routerLinkActive="text-secondary">
-            Hombres
-          </a>
-        </li>
-        <li>
-          <a routerLink="/gender/women" class="btn btn-ghost" routerLinkActive="text-secondary">
-            Mujeres
-          </a>
-        </li>
-        <li>
-          <a routerLink="/gender/kid" class="btn btn-ghost" routerLinkActive="text-secondary">
-            Niños
-          </a>
-        </li>
+      
+      <ul tabindex="-1" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow gap-1">
+        <li><a routerLink="/gender/men" routerLinkActive="text-secondary">Hombres</a></li>
+        <li><a routerLink="/gender/women" routerLinkActive="text-secondary">Mujeres</a></li>
+        <li><a routerLink="/gender/kid" routerLinkActive="text-secondary">Niños</a></li>
+
+
+        @if(authService.authStatus() === 'not-authenticated') {
+          <li><a routerLink="/auth/login" class="text-primary font-semibold">Login</a></li>
+          <li><a routerLink="/auth/register" class="text-info font-semibold">Registro</a></li>
+        }
+
+        @if(authService.authStatus() === 'authenticated') {
+          <li class="text-success px-3 py-1">
+            {{authService.user()?.fullName}}
+          </li>
+          @if (authService.isAdmin()) {
+            <li><a routerLink="/admin/dashboard" class="text-info">Administrar</a></li>
+          }
+          <li><a class="text-error" (click)="authService.logout()">Salir</a></li>
+        }
       </ul>
     </div>
-    <a routerLink="/" class="btn btn-ghost text-xl font-montserrat">Teslo <span class="text-secondary">| Shop
-      </span></a>
+    
+    <a routerLink="/" class="btn btn-ghost text-xl font-montserrat px-2">
+      Teslo <span class="text-secondary">| Shop</span>
+    </a>
   </div>
+
   <div class="navbar-center hidden lg:flex">
-    <ul class="menu menu-horizontal px-1">
-      <li>
-        <a routerLink="/gender/men" class="btn btn-ghost" routerLinkActive="text-secondary">
-          Hombres
-        </a>
-      </li>
-      <li>
-        <a routerLink="/gender/women" class="btn btn-ghost" routerLinkActive="text-secondary">
-          Mujeres
-        </a>
-      </li>
-      <li>
-        <a routerLink="/gender/kid" class="btn btn-ghost" routerLinkActive="text-secondary">
-          Niños
-        </a>
-      </li>
+    <ul class="menu menu-horizontal px-1 gap-2">
+      <li><a routerLink="/gender/men" routerLinkActive="text-secondary" class="btn">Hombres</a></li>
+      <li><a routerLink="/gender/women" routerLinkActive="text-secondary" class="btn">Mujeres</a></li>
+      <li><a routerLink="/gender/kid" routerLinkActive="text-secondary" class="rbtn">Niños</a></li>
     </ul>
   </div>
-  <div class="navbar-end gap-4">
-    
+
+  <div class="navbar-end gap-2 hidden lg:flex">
     @if (authService.authStatus() === 'authenticated') {
-    <button class="btn btn-ghost">{{authService.user()?.fullName}}</button>
-    <button class="btn btn-sm btn-error" (click)="authService.logout()">Salir</button>
-    }
-    @if (authService.isAdmin()) {
-      <button class="btn btn-sm btn-info" routerLink="/admin/dashboard">Administrar</button>
+      <span class="text-sm font-medium px-2">{{authService.user()?.fullName}}</span>
+      
+      @if (authService.isAdmin()) {
+        <a class="btn btn-sm btn-info" routerLink="/admin/dashboard">Administrar</a>
+      }
+      
+      <button class="btn btn-sm btn-error btn-outline" (click)="authService.logout()">Salir</button>
     }
 
     @if(authService.authStatus() === 'not-authenticated') {
-      <a class="btn btn-sm btn-secondary" routerLink="/auth/login">Login</a>
+      <a class="btn btn-sm btn-ghost" routerLink="/auth/login">Login</a>
       <a class="btn btn-sm btn-primary" routerLink="/auth/register">Registro</a>
     }
   </div>
+  
 </div>

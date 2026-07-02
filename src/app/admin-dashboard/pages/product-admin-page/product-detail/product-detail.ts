@@ -4,6 +4,7 @@ import { ProductCarousel } from '@/products/components/product-carousel/product-
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormUtils } from '@/utils/form.utils';
 import { FormErrorLabel } from '@/shared/components/form-error-label/form-error-label';
+import { ProductService } from '@/products/services/product.service';
 
 @Component({
   selector: 'product-detail',
@@ -12,6 +13,8 @@ import { FormErrorLabel } from '@/shared/components/form-error-label/form-error-
 })
 export class ProductDetail implements OnInit {
   product = input.required<Product>();
+
+  productService = inject(ProductService)
 
   fb = inject(FormBuilder);
 
@@ -51,6 +54,23 @@ export class ProductDetail implements OnInit {
 
   onSubmit() {
     const isValid = this.productForm.valid;
-    console.log(this.productForm.value, isValid);
+    this.productForm.markAllAsTouched();
+
+    if(!isValid) return;
+
+    const formValue = this.productForm.value;
+
+    const productLike: Partial<Product> ={
+      ...(formValue as any),
+      tags: formValue.tags?.toLowerCase().split(',').map(tag => tag.trim()) ?? [],  
+    }
+
+    console.log({productLike});
+
+    this.productService.updateProduct(this.product().id, productLike).subscribe(
+      product => {
+        console.log('producto actualizado');
+      }
+    )
   }
 }

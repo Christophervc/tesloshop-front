@@ -142,9 +142,30 @@
       </button>
     </div>
 
-    <product-carousel [images]="product().images" />
+    <product-carousel [images]="imagesToCarousel()" />
 
-    <input type="file" class="file-input file-input-bordered w-full mt-4" />
+    <input 
+      multiple  
+      type="file" 
+      accept="image/png, image/webp, image/jpeg"
+      class="file-input file-input-bordered w-full mt-4"
+      (change) = onFilesChanged($event)
+    />
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      @for (image of tempImages(); track $index) {
+        <div class="relative">
+          <img [src]="image" alt="product image" class="w-full object-cover" />
+          <button
+            type="button"
+            class="btn btn-error btn-sm absolute top-1 right-1 w-6 h-6 p-0 text-xs rounded-full"
+            (click)="tempImages.set(tempImages().filter((_, i) => i !== $index))"
+          >
+            X
+          </button>
+        </div>
+      }
+    </div>
   </div>
 </form>
 

@@ -5,6 +5,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormUtils } from '@/utils/form.utils';
 import { FormErrorLabel } from '@/shared/components/form-error-label/form-error-label';
 import { ProductService } from '@/products/services/product.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'product-detail',
@@ -14,7 +15,9 @@ import { ProductService } from '@/products/services/product.service';
 export class ProductDetail implements OnInit {
   product = input.required<Product>();
 
-  productService = inject(ProductService)
+  productService = inject(ProductService);
+
+  router = inject(Router);
 
   fb = inject(FormBuilder);
 
@@ -56,21 +59,30 @@ export class ProductDetail implements OnInit {
     const isValid = this.productForm.valid;
     this.productForm.markAllAsTouched();
 
-    if(!isValid) return;
+    if (!isValid) return;
 
     const formValue = this.productForm.value;
 
-    const productLike: Partial<Product> ={
+    const productLike: Partial<Product> = {
       ...(formValue as any),
-      tags: formValue.tags?.toLowerCase().split(',').map(tag => tag.trim()) ?? [],  
+      tags:
+        formValue.tags
+          ?.toLowerCase()
+          .split(',')
+          .map((tag) => tag.trim()) ?? [],
+    };
+
+    console.log({ productLike });
+
+    if (this.product().id === 'new') {
+      this.productService.createProduct(productLike).subscribe((product) => {
+        console.log('producto creado');
+        this.router.navigate(['/admin/products', product.id]);
+      });
     }
 
-    console.log({productLike});
-
-    this.productService.updateProduct(this.product().id, productLike).subscribe(
-      product => {
-        console.log('producto actualizado');
-      }
-    )
+    this.productService.updateProduct(this.product().id, productLike).subscribe((product) => {
+      console.log('producto actualizado');
+    });
   }
 }

@@ -1,11 +1,12 @@
 import { Product } from '@/products/interfaces/product.interface';
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { ProductCarousel } from '@/products/components/product-carousel/product-carousel';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormUtils } from '@/utils/form.utils';
 import { FormErrorLabel } from '@/shared/components/form-error-label/form-error-label';
 import { ProductService } from '@/products/services/product.service';
 import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'product-detail',
@@ -20,6 +21,8 @@ export class ProductDetail implements OnInit {
   router = inject(Router);
 
   fb = inject(FormBuilder);
+
+  productSavedAlert = signal(false);
 
   productForm = this.fb.group({
     title: ['', Validators.required],
@@ -55,7 +58,7 @@ export class ProductDetail implements OnInit {
     this.productForm.patchValue({ sizes: currentSizes });
   }
 
-  onSubmit() {
+  async onSubmit() {
     const isValid = this.productForm.valid;
     this.productForm.markAllAsTouched();
 
@@ -75,14 +78,17 @@ export class ProductDetail implements OnInit {
     console.log({ productLike });
 
     if (this.product().id === 'new') {
-      this.productService.createProduct(productLike).subscribe((product) => {
-        console.log('producto creado');
-        this.router.navigate(['/admin/products', product.id]);
-      });
+      // create a new product
+      const product = await firstValueFrom(this.productService.createProduct(productLike));
+
+      console.log('producto creado');
+      this.router.navigate(['/admin/products', product.id]);
+    } else {
+      await firstValueFrom(this.productService.updateProduct(this.product().id, productLike));
+      console.log('producto actualizado');
     }
 
-    this.productService.updateProduct(this.product().id, productLike).subscribe((product) => {
-      console.log('producto actualizado');
-    });
+    this.productSavedAlert.set(true);
+    setTimeout(() => this.productSavedAlert.set(false), 2000);
   }
 }
